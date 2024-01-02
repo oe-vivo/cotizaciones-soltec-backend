@@ -27,6 +27,10 @@ public class Precio {
     @Column(nullable = false)
     private LocalDateTime fechaActualizacion;
 
+    public Precio() {
+
+    }
+
     @PrePersist
     public void prePersist() {
         fechaCreacion = fechaActualizacion = LocalDateTime.now();

@@ -39,6 +39,10 @@ public class Mayorista {
     @Column(nullable = false)
     private LocalDateTime fechaActualizacion;
 
+    public Mayorista() {
+
+    }
+
     @PrePersist
     public void prePersist() {
         fechaCreacion = fechaActualizacion = LocalDateTime.now();
