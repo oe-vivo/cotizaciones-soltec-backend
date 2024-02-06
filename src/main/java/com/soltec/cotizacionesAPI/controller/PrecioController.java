@@ -1,5 +1,6 @@
 package com.soltec.cotizacionesAPI.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -9,34 +10,39 @@ import com.soltec.cotizacionesAPI.services.PrecioService;
 @RequestMapping("/api/precios")
 public class PrecioController {
 
+    private final PrecioService precioService;
+
     @Autowired
-    private PrecioService precioService;
-
-    @GetMapping
-    public List<Precio> getAllPrecios() {
-        return precioService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Precio getPrecioById(@PathVariable Long id) {
-        return precioService.findById(id).orElse(null);
+    public PrecioController(PrecioService precioService) {
+        this.precioService = precioService;
     }
 
     @PostMapping
-    public Precio createPrecio(@RequestBody Precio precio) {
-        return precioService.save(precio);
+    public ResponseEntity<Precio> createPrecio(@RequestBody Precio precio) {
+        Precio nuevoPrecio = precioService.savePrecio(precio);
+        return ResponseEntity.ok(nuevoPrecio);
     }
 
-    @PutMapping("/{id}")
-    public Precio updatePrecio(@PathVariable Long id, @RequestBody Precio precio) {
-        // Aquí puedes agregar lógica para actualizar un precio existente
-        return precioService.save(precio);
+    @GetMapping("/{id}")
+    public ResponseEntity<Precio> getPrecioById(@PathVariable Long id) {
+        return precioService.getPrecioById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public List<Precio> getAllPrecios() {
+        return precioService.getAllPrecios();
     }
 
     @DeleteMapping("/{id}")
-    public void deletePrecio(@PathVariable Long id) {
-        precioService.delete(id);
+    public ResponseEntity<Void> deletePrecio(@PathVariable Long id) {
+        if (!precioService.getPrecioById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        precioService.deletePrecio(id);
+        return ResponseEntity.ok().build();
     }
 
-    // Puedes agregar más métodos según lo necesites
+    // Aquí puedes añadir más endpoints según lo necesites.
 }

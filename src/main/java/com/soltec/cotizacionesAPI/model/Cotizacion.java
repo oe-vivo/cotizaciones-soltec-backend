@@ -7,6 +7,10 @@ import java.time.LocalDateTime;
 @Table(name = "cotizacion")
 public class Cotizacion {
 
+    public Cotizacion(){
+        prePersist();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cotizacionId;

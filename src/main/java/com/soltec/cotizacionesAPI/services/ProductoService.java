@@ -9,25 +9,28 @@ import com.soltec.cotizacionesAPI.model.Producto;
 @Service
 public class ProductoService {
 
+    private final ProductoRepository productoRepository;
+
     @Autowired
-    private ProductoRepository repository;
-
-    public List<Producto> findAll() {
-        return repository.findAll();
+    public ProductoService(ProductoRepository productoRepository) {
+        this.productoRepository = productoRepository;
     }
 
-    public Optional<Producto> findById(Long id) {
-        return repository.findById(id);
+    public Producto saveProducto(Producto producto) {
+        return productoRepository.save(producto);
     }
 
-    public Producto save(Producto producto) {
-        return repository.save(producto);
+    public Optional<Producto> getProductoById(Long id) {
+        return productoRepository.findById(id);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    public List<Producto> getAllProductos() {
+        return productoRepository.findAll();
     }
 
-    // Más métodos según se requieran
+    public void deleteProducto(Long id) {
+        productoRepository.deleteById(id);
+    }
+
+    // Puedes añadir más métodos según la lógica de negocio.
 }
-

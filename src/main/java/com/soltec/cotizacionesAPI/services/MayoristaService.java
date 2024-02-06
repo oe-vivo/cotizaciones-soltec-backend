@@ -10,25 +10,28 @@ import com.soltec.cotizacionesAPI.repository.MayoristaRepository;
 @Service
 public class MayoristaService {
 
+    private final MayoristaRepository mayoristaRepository;
+
     @Autowired
-    private MayoristaRepository mayoristaRepository;
-
-    public List<Mayorista> findAll() {
-        return mayoristaRepository.findAll();
+    public MayoristaService(MayoristaRepository mayoristaRepository) {
+        this.mayoristaRepository = mayoristaRepository;
     }
 
-    public Optional<Mayorista> findById(Long id) {
-        return mayoristaRepository.findById(id);
-    }
-
-    public Mayorista save(Mayorista mayorista) {
+    public Mayorista saveMayorista(Mayorista mayorista) {
         return mayoristaRepository.save(mayorista);
     }
 
-    public void delete(Long id) {
+    public Optional<Mayorista> getMayoristaById(Long id) {
+        return mayoristaRepository.findById(id);
+    }
+
+    public List<Mayorista> getAllMayoristas() {
+        return mayoristaRepository.findAll();
+    }
+
+    public void deleteMayorista(Long id) {
         mayoristaRepository.deleteById(id);
     }
 
-    // Aquí puedes añadir más métodos según lo necesites
+    // Puedes añadir más métodos según la lógica de negocio.
 }
-

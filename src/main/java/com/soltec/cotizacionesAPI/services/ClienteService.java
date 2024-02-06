@@ -10,24 +10,28 @@ import java.util.Optional;
 @Service
 public class ClienteService {
 
+    private final ClienteRepository clienteRepository;
+
     @Autowired
-    private ClienteRepository clienteRepository;
-
-    public List<Cliente> findAll() {
-        return clienteRepository.findAll();
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
     }
 
-    public Optional<Cliente> findById(Long id) {
-        return clienteRepository.findById(id);
-    }
-
-    public Cliente save(Cliente cliente) {
+    public Cliente saveCliente(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
-    public void delete(Long id) {
+    public Optional<Cliente> getClienteById(Long id) {
+        return clienteRepository.findById(id);
+    }
+
+    public List<Cliente> getAllClientes() {
+        return clienteRepository.findAll();
+    }
+
+    public void deleteCliente(Long id) {
         clienteRepository.deleteById(id);
     }
 
-    // Aquí puedes añadir más métodos según lo necesites
+    // Puedes añadir más métodos según la lógica de negocio.
 }

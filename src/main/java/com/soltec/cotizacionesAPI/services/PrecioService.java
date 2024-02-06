@@ -10,25 +10,28 @@ import com.soltec.cotizacionesAPI.repository.PrecioRepository;
 @Service
 public class PrecioService {
 
+    private final PrecioRepository precioRepository;
+
     @Autowired
-    private PrecioRepository precioRepository;
-
-    public List<Precio> findAll() {
-        return precioRepository.findAll();
+    public PrecioService(PrecioRepository precioRepository) {
+        this.precioRepository = precioRepository;
     }
 
-    public Optional<Precio> findById(Long id) {
-        return precioRepository.findById(id);
-    }
-
-    public Precio save(Precio precio) {
+    public Precio savePrecio(Precio precio) {
         return precioRepository.save(precio);
     }
 
-    public void delete(Long id) {
+    public Optional<Precio> getPrecioById(Long id) {
+        return precioRepository.findById(id);
+    }
+
+    public List<Precio> getAllPrecios() {
+        return precioRepository.findAll();
+    }
+
+    public void deletePrecio(Long id) {
         precioRepository.deleteById(id);
     }
 
-    // Aquí puedes añadir más métodos según lo necesites
+    // Puedes añadir más métodos según la lógica de negocio.
 }
-

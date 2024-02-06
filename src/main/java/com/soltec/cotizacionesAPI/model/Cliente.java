@@ -2,6 +2,8 @@ package com.soltec.cotizacionesAPI.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "cliente")
@@ -9,47 +11,67 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long clienteId;
+    private Long idCliente;
 
-    @Column(nullable = false)
-    private String nombre;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "datos_fiscales_id", referencedColumnName = "idDatosFiscales")
+    private DatosFiscales datosFiscales;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @ElementCollection
+    @CollectionTable(name = "cliente_telefonos", joinColumns = @JoinColumn(name = "cliente_id"))
+    @Column(name = "telefono")
+    private Set<String> telefonos;
 
-    @Column(nullable = false, unique = true)
-    private String rfc;
+    @ElementCollection
+    @CollectionTable(name = "cliente_emails", joinColumns = @JoinColumn(name = "cliente_id"))
+    @Column(name = "email")
+    private Set<String> correosElectronicos;
 
-    @Column(nullable = false)
-    private String direccion;
 
-    @Column(nullable = false)
-    private String numExt;
-
-    @Column(nullable = false)
-    private String numInt;
-
-    @Column(nullable = false)
-    private String colonia;
-
-    @Column(nullable = false)
-    private String municipio;
-
-    @Column(nullable = false)
-    private String estado;
-
-    @Column(nullable = false, unique = true)
-    private String constanciaFiscal;
-
-    @Column(nullable = false, unique = true)
-    private String actaConstitucional;
-    // Otros campos...
-
-    @Column(nullable = false, updatable = false)
+    @Column
+    private LocalDateTime fechaActualizacion;
+    @Column
     private LocalDateTime fechaCreacion;
 
-    @Column(nullable = false)
-    private LocalDateTime fechaActualizacion;
+    public Cliente(){
+        datosFiscales=new DatosFiscales();
+        correosElectronicos=new HashSet<>();
+        telefonos=new HashSet<>();
+        prePersist();
+    }
+    // Getters y setters...
+
+    public Long getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Long idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public DatosFiscales getDatosFiscales() {
+        return datosFiscales;
+    }
+
+    public void setDatosFiscales(DatosFiscales datosFiscales) {
+        this.datosFiscales = datosFiscales;
+    }
+
+    public Set<String> getTelefonos() {
+        return telefonos;
+    }
+
+    public void setTelefonos(Set<String> telefonos) {
+        this.telefonos = telefonos;
+    }
+
+    public Set<String> getCorreosElectronicos() {
+        return correosElectronicos;
+    }
+
+    public void setCorreosElectronicos(Set<String> correosElectronicos) {
+        this.correosElectronicos = correosElectronicos;
+    }
 
     @PrePersist
     public void prePersist() {
@@ -59,138 +81,5 @@ public class Cliente {
     @PreUpdate
     public void preUpdate() {
         fechaActualizacion = LocalDateTime.now();
-    }
-
-    // Getters y setters...
-
-
-    public Cliente(){
-
-    }
-    public Cliente(String nombre, String email, String rfc, String direccion, String numExt, String numInt, String colonia, String municipio, String estado, String constanciaFiscal, String actaConstitucional) {
-        this.nombre = nombre;
-        this.email = email;
-        this.rfc = rfc;
-        this.direccion = direccion;
-        this.numExt = numExt;
-        this.numInt = numInt;
-        this.colonia = colonia;
-        this.municipio = municipio;
-        this.estado = estado;
-        this.constanciaFiscal = constanciaFiscal;
-        this.actaConstitucional = actaConstitucional;
-        prePersist();
-    }
-
-    public Long getClienteId() {
-        return clienteId;
-    }
-
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getRfc() {
-        return rfc;
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getNumExt() {
-        return numExt;
-    }
-
-    public void setNumExt(String numExt) {
-        this.numExt = numExt;
-    }
-
-    public String getNumInt() {
-        return numInt;
-    }
-
-    public void setNumInt(String numInt) {
-        this.numInt = numInt;
-    }
-
-    public String getColonia() {
-        return colonia;
-    }
-
-    public void setColonia(String colonia) {
-        this.colonia = colonia;
-    }
-
-    public String getMunicipio() {
-        return municipio;
-    }
-
-    public void setMunicipio(String municipio) {
-        this.municipio = municipio;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public String getConstanciaFiscal() {
-        return constanciaFiscal;
-    }
-
-    public void setConstanciaFiscal(String constanciaFiscal) {
-        this.constanciaFiscal = constanciaFiscal;
-    }
-
-    public String getActaConstitucional() {
-        return actaConstitucional;
-    }
-
-    public void setActaConstitucional(String actaConstitucional) {
-        this.actaConstitucional = actaConstitucional;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public LocalDateTime getFechaActualizacion() {
-        return fechaActualizacion;
-    }
-
-    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
     }
 }

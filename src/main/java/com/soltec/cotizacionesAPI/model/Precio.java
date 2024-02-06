@@ -28,7 +28,7 @@ public class Precio {
     private LocalDateTime fechaActualizacion;
 
     public Precio() {
-
+        prePersist();
     }
 
     @PrePersist

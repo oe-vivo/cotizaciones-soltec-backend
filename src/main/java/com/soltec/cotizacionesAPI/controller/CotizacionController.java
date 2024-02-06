@@ -1,5 +1,6 @@
 package com.soltec.cotizacionesAPI.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -9,35 +10,40 @@ import com.soltec.cotizacionesAPI.services.CotizacionService;
 @RequestMapping("/api/cotizaciones")
 public class CotizacionController {
 
+    private final CotizacionService cotizacionService;
+
     @Autowired
-    private CotizacionService cotizacionService;
-
-    @GetMapping
-    public List<Cotizacion> getAllCotizaciones() {
-        return cotizacionService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Cotizacion getCotizacionById(@PathVariable Long id) {
-        return cotizacionService.findById(id).orElse(null);
+    public CotizacionController(CotizacionService cotizacionService) {
+        this.cotizacionService = cotizacionService;
     }
 
     @PostMapping
-    public Cotizacion createCotizacion(@RequestBody Cotizacion cotizacion) {
-        return cotizacionService.save(cotizacion);
+    public ResponseEntity<Cotizacion> createCotizacion(@RequestBody Cotizacion cotizacion) {
+        Cotizacion nuevaCotizacion = cotizacionService.saveCotizacion(cotizacion);
+        return ResponseEntity.ok(nuevaCotizacion);
     }
 
-    @PutMapping("/{id}")
-    public Cotizacion updateCotizacion(@PathVariable Long id, @RequestBody Cotizacion cotizacion) {
-        // Aquí puedes agregar lógica para actualizar una cotización existente
-        return cotizacionService.save(cotizacion);
+    @GetMapping("/{id}")
+    public ResponseEntity<Cotizacion> getCotizacionById(@PathVariable Long id) {
+        return cotizacionService.getCotizacionById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public List<Cotizacion> getAllCotizaciones() {
+        return cotizacionService.getAllCotizaciones();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCotizacion(@PathVariable Long id) {
-        cotizacionService.delete(id);
+    public ResponseEntity<Void> deleteCotizacion(@PathVariable Long id) {
+        if (!cotizacionService.getCotizacionById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        cotizacionService.deleteCotizacion(id);
+        return ResponseEntity.ok().build();
     }
 
-    // Puedes agregar más métodos según lo necesites
+    // Aquí puedes añadir más endpoints según lo necesites.
 }
 

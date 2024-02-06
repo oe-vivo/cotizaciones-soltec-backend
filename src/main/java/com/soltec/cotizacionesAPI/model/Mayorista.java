@@ -11,27 +11,9 @@ public class Mayorista {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mayoristaId;
 
-    @Column(nullable = false)
-    private String nombre;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false, unique = true)
-    private String rfc;
-
-    @Column(nullable = false)
-    private String constanciaFiscal;
-
-    @Column(nullable = false)
-    private boolean credito;
-
-    @Column(nullable = false)
-    private float montoCredito;
-
-    @Column(nullable = false)
-    private String estado;
-    // Otros campos...
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "datos_fiscales_id", referencedColumnName = "idDatosFiscales")
+    private DatosFiscales datosFiscales;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
@@ -40,11 +22,11 @@ public class Mayorista {
     private LocalDateTime fechaActualizacion;
 
     public Mayorista() {
-
+        prePersist();
+        datosFiscales=new DatosFiscales();
     }
 
-    @PrePersist
-    public void prePersist() {
+    @PrePersist    public void prePersist() {
         fechaCreacion = fechaActualizacion = LocalDateTime.now();
     }
 
@@ -56,17 +38,6 @@ public class Mayorista {
     // Getters y setters...
 
 
-    public Mayorista(String nombre, String email, String rfc, String constanciaFiscal, boolean credito, float montoCredito, String estado) {
-        this.nombre = nombre;
-        this.email = email;
-        this.rfc = rfc;
-        this.constanciaFiscal = constanciaFiscal;
-        this.credito = credito;
-        this.montoCredito = montoCredito;
-        this.estado = estado;
-        prePersist();
-    }
-
     public Long getMayoristaId() {
         return mayoristaId;
     }
@@ -75,61 +46,6 @@ public class Mayorista {
         this.mayoristaId = mayoristaId;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getRfc() {
-        return rfc;
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
-    }
-
-    public String getConstanciaFiscal() {
-        return constanciaFiscal;
-    }
-
-    public void setConstanciaFiscal(String constanciaFiscal) {
-        this.constanciaFiscal = constanciaFiscal;
-    }
-
-    public boolean isCredito() {
-        return credito;
-    }
-
-    public void setCredito(boolean credito) {
-        this.credito = credito;
-    }
-
-    public float getMontoCredito() {
-        return montoCredito;
-    }
-
-    public void setMontoCredito(float montoCredito) {
-        this.montoCredito = montoCredito;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 
     public LocalDateTime getFechaCreacion() {
         return fechaCreacion;

@@ -9,25 +9,29 @@ import com.soltec.cotizacionesAPI.repository.DetalleCotizacionRepository;
 @Service
 public class DetalleCotizacionService {
 
+    private final DetalleCotizacionRepository detalleCotizacionRepository;
+
     @Autowired
-    private DetalleCotizacionRepository repository;
-
-    public List<DetalleCotizacion> findAll() {
-        return repository.findAll();
+    public DetalleCotizacionService(DetalleCotizacionRepository detalleCotizacionRepository) {
+        this.detalleCotizacionRepository = detalleCotizacionRepository;
     }
 
-    public Optional<DetalleCotizacion> findById(Long id) {
-        return repository.findById(id);
+    public DetalleCotizacion saveDetalleCotizacion(DetalleCotizacion detalleCotizacion) {
+        // Aquí puedes añadir lógica de negocio adicional antes de guardar el detalle
+        return detalleCotizacionRepository.save(detalleCotizacion);
     }
 
-    public DetalleCotizacion save(DetalleCotizacion detalle) {
-        return repository.save(detalle);
+    public Optional<DetalleCotizacion> getDetalleCotizacionById(Long id) {
+        return detalleCotizacionRepository.findById(id);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    public List<DetalleCotizacion> getAllDetallesCotizacion() {
+        return detalleCotizacionRepository.findAll();
     }
 
-    // Más métodos según se requieran
+    public void deleteDetalleCotizacion(Long id) {
+        detalleCotizacionRepository.deleteById(id);
+    }
+
+    // Puedes añadir más métodos según la lógica de negocio.
 }
-

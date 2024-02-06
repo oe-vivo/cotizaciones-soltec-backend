@@ -40,6 +40,10 @@ public class Producto {
     @Column(nullable = false)
     private LocalDateTime fechaActualizacion;
 
+    public Producto(){
+        prePersist();
+    }
+
     @PrePersist
     public void prePersist() {
         fechaCreacion = fechaActualizacion = LocalDateTime.now();

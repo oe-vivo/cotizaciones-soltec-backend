@@ -9,25 +9,28 @@ import com.soltec.cotizacionesAPI.repository.CotizacionRepository;
 @Service
 public class CotizacionService {
 
+    private final CotizacionRepository cotizacionRepository;
+
     @Autowired
-    private CotizacionRepository cotizacionRepository;
-
-    public List<Cotizacion> findAll() {
-        return cotizacionRepository.findAll();
+    public CotizacionService(CotizacionRepository cotizacionRepository) {
+        this.cotizacionRepository = cotizacionRepository;
     }
 
-    public Optional<Cotizacion> findById(Long id) {
-        return cotizacionRepository.findById(id);
-    }
-
-    public Cotizacion save(Cotizacion cotizacion) {
+    public Cotizacion saveCotizacion(Cotizacion cotizacion) {
         return cotizacionRepository.save(cotizacion);
     }
 
-    public void delete(Long id) {
+    public Optional<Cotizacion> getCotizacionById(Long id) {
+        return cotizacionRepository.findById(id);
+    }
+
+    public List<Cotizacion> getAllCotizaciones() {
+        return cotizacionRepository.findAll();
+    }
+
+    public void deleteCotizacion(Long id) {
         cotizacionRepository.deleteById(id);
     }
 
-    // Aquí puedes añadir más métodos según lo necesites
+    // Puedes añadir más métodos según la lógica de negocio.
 }
-

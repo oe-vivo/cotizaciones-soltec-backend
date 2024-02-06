@@ -1,5 +1,6 @@
 package com.soltec.cotizacionesAPI.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.soltec.cotizacionesAPI.model.Cliente;
@@ -11,34 +12,36 @@ import java.util.List;
 @RequestMapping("/api/clientes")
 public class ClienteController {
 
+    private final ClienteService clienteService;
+
     @Autowired
-    private ClienteService clienteService;
-
-    @GetMapping
-    public List<Cliente> getAllClientes() {
-        return clienteService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Cliente getClienteById(@PathVariable Long id) {
-        return clienteService.findById(id).orElse(null);
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
     }
 
     @PostMapping
-    public Cliente createCliente(@RequestBody Cliente cliente) {
-        return clienteService.save(cliente);
+    public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
+        Cliente savedCliente = clienteService.saveCliente(cliente);
+        return ResponseEntity.ok(savedCliente);
     }
 
-    @PutMapping("/{id}")
-    public Cliente updateCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
-        // Aquí puedes agregar lógica para actualizar un cliente existente
-        return clienteService.save(cliente);
+    @GetMapping("/{id}")
+    public ResponseEntity<Cliente> getClienteById(@PathVariable Long id) {
+        return clienteService.getClienteById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public List<Cliente> getAllClientes() {
+        return clienteService.getAllClientes();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCliente(@PathVariable Long id) {
-        clienteService.delete(id);
+    public ResponseEntity<Void> deleteCliente(@PathVariable Long id) {
+        clienteService.deleteCliente(id);
+        return ResponseEntity.ok().build();
     }
 
-    // Puedes agregar más métodos según lo necesites
+    // Puedes añadir más endpoints según lo necesites.
 }
