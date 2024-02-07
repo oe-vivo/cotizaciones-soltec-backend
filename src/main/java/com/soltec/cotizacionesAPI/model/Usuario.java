@@ -101,4 +101,5 @@ public class Usuario {
     public void preUpdate() {
         fechaActualizacion = LocalDateTime.now();
     }
+
 }

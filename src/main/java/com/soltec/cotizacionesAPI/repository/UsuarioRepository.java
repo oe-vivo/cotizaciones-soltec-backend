@@ -9,4 +9,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Aquí puedes definir métodos de consulta personalizados si es necesario.
     // Por ejemplo, encontrar un usuario por correo:
     Usuario findByCorreo(String correo);
+
+    boolean existsByCorreo(String correo);
 }
